@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Sortie du jeu bientôt !</title>
-    <!-- Police style gaming -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <style>
         html, body {
@@ -11,19 +10,19 @@
             padding: 0;
             height: 100%;
             font-family: 'Orbitron', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #eee;
             text-align: center;
-            /* Fond psychédélique animé */
+            color: #eee;
             background: linear-gradient(270deg, #ff00cc, #00ffff, #ffcc00, #ff00cc);
             background-size: 400% 400%;
             animation: gradientAnimation 25s ease infinite;
+            position: relative;
         }
 
         @keyframes gradientAnimation {
@@ -49,29 +48,6 @@
             width: 90%;
         }
 
-        /* Vidéo responsive */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            height: 0;
-            overflow: hidden;
-            max-width: 1200px; /* limite la taille sur très grands écrans */
-            width: 90%;
-            margin: 40px auto;
-            border-radius: 12px;
-            box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Bouton wishlist */
         .btn {
             display: inline-block;
             margin-top: 40px;
@@ -93,11 +69,46 @@
             box-shadow: 0 0 30px #ff00cc, 0 0 60px #00ffff, 0 0 90px #ffcc00;
         }
 
-        /* Ajustements pour écrans ultra-larges */
+        /* Vidéo responsive en bas */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 1200px;
+            width: 90%;
+            margin: 40px auto;
+            border-radius: 12px;
+            box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Particules psychédéliques */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: floatParticles linear infinite;
+        }
+
+        @keyframes floatParticles {
+            0% { transform: translateY(100vh) translateX(0) scale(0.5); opacity: 0; }
+            10% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) translateX(var(--x)) scale(var(--scale)); opacity: 0; }
+        }
+
+        /* Ajustements écrans ultra-larges */
         @media (min-width: 2500px) {
-            body {
-                background-size: 200% 200%;
-            }
+            body { background-size: 200% 200%; }
         }
     </style>
 </head>
@@ -105,7 +116,13 @@
 
 <h1>Le jeu arrive bientôt !</h1>
 
-<!-- Vidéo YouTube responsive -->
+<!-- Compte à rebours -->
+<div id="countdown"></div>
+
+<!-- Bouton wishlist -->
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn">Ajouter à la wishlist</a>
+
+<!-- Vidéo YouTube responsive en bas -->
 <div class="video-container">
     <iframe 
         src="https://www.youtube.com/embed/QVZi0NMO1H4" 
@@ -115,33 +132,39 @@
     </iframe>
 </div>
 
-<!-- Compte à rebours -->
-<div id="countdown"></div>
-
-<!-- Bouton wishlist -->
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn">Ajouter à la wishlist</a>
-
 <script>
+    // Compte à rebours
     const releaseDate = new Date("2025/12/12 23:42:00");
-
     const timer = setInterval(() => {
         const now = new Date().getTime();
         const diff = releaseDate - now;
-
         if (diff <= 0) {
             clearInterval(timer);
             document.getElementById("countdown").innerHTML = "Le jeu est sorti !";
             return;
         }
-
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        document.getElementById("countdown").innerHTML =
-            `${days}j ${hours}h ${minutes}m ${seconds}s`;
+        document.getElementById("countdown").innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
     }, 1000);
+
+    // Création des particules
+    const particleCount = 60;
+    for(let i=0; i<particleCount; i++){
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random()*10 + 5;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.background = `hsl(${Math.random()*360}, 100%, 60%)`;
+        particle.style.left = Math.random()*100 + 'vw';
+        particle.style.setProperty('--x', (Math.random()*200 - 100) + 'vw');
+        particle.style.setProperty('--scale', Math.random()*1 + 0.5);
+        particle.style.animationDuration = (Math.random()*15 + 10) + 's';
+        document.body.appendChild(particle);
+    }
 </script>
 
 </body>
