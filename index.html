@@ -5,24 +5,23 @@
     <title>Sortie du jeu bientôt !</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Orbitron', sans-serif;
-            overflow-x: hidden; /* pas de scroll horizontal */
+        html {
+            height: 100%;
         }
 
         body {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch; /* permet au contenu de pousser le body */
             text-align: center;
+            font-family: 'Orbitron', sans-serif;
             color: #eee;
             background: linear-gradient(270deg, #ff00cc, #00ffff, #ffcc00, #ff00cc);
             background-size: 400% 400%;
             animation: gradientAnimation 25s ease infinite;
             position: relative;
-            min-height: 100vh;
+            min-height: 100%;
+            overflow-x: hidden; /* pas de scroll horizontal */
         }
 
         @keyframes gradientAnimation {
@@ -31,14 +30,18 @@
             100% { background-position: 0% 50%; }
         }
 
+        h1, #countdown, .btn, .video-container {
+            max-width: 1200px;
+            width: 90%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
         h1 {
             font-size: 3em;
             margin-top: 50px;
             text-shadow: 0 0 15px #00ffcc, 0 0 30px #ff00ff, 0 0 45px #ffcc00;
-            max-width: 1200px;
-            width: 90%;
-            position: relative;
-            z-index: 1;
         }
 
         #countdown {
@@ -46,10 +49,6 @@
             margin-top: 20px;
             color: #00ffcc;
             text-shadow: 0 0 10px #00ffcc, 0 0 20px #ff00ff;
-            max-width: 1200px;
-            width: 90%;
-            position: relative;
-            z-index: 1;
         }
 
         .btn {
@@ -64,10 +63,6 @@
             text-decoration: none;
             box-shadow: 0 0 15px #ff00cc, 0 0 30px #00ffff, 0 0 45px #ffcc00;
             transition: 0.3s;
-            max-width: 1200px;
-            width: 90%;
-            position: relative;
-            z-index: 1;
         }
 
         .btn:hover {
@@ -77,16 +72,12 @@
 
         .video-container {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* 16:9 */
             height: 0;
             overflow: hidden;
-            max-width: 1200px;
-            width: 90%;
             margin: 40px auto;
             border-radius: 12px;
             box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
-            position: relative;
-            z-index: 1;
         }
 
         .video-container iframe {
@@ -148,6 +139,11 @@
 </div>
 
 <script>
+    // Forcer min-height du body au chargement pour garantir le scroll
+    window.addEventListener('load', () => {
+        document.body.style.minHeight = document.body.scrollHeight + 'px';
+    });
+
     // Compte à rebours
     const releaseDate = new Date("2025/12/12 23:42:00");
     const timer = setInterval(() => {
