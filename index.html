@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Orbitron', sans-serif;
-            overflow-x: hidden; /* seulement horizontalement */
+            overflow-x: hidden; /* pas de scroll horizontal */
         }
 
         body {
@@ -22,6 +22,7 @@
             background-size: 400% 400%;
             animation: gradientAnimation 25s ease infinite;
             position: relative;
+            min-height: 100vh;
         }
 
         @keyframes gradientAnimation {
@@ -36,6 +37,8 @@
             text-shadow: 0 0 15px #00ffcc, 0 0 30px #ff00ff, 0 0 45px #ffcc00;
             max-width: 1200px;
             width: 90%;
+            position: relative;
+            z-index: 1;
         }
 
         #countdown {
@@ -45,6 +48,8 @@
             text-shadow: 0 0 10px #00ffcc, 0 0 20px #ff00ff;
             max-width: 1200px;
             width: 90%;
+            position: relative;
+            z-index: 1;
         }
 
         .btn {
@@ -61,6 +66,8 @@
             transition: 0.3s;
             max-width: 1200px;
             width: 90%;
+            position: relative;
+            z-index: 1;
         }
 
         .btn:hover {
@@ -68,10 +75,9 @@
             box-shadow: 0 0 30px #ff00cc, 0 0 60px #00ffff, 0 0 90px #ffcc00;
         }
 
-        /* Vidéo responsive en bas */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             max-width: 1200px;
@@ -79,6 +85,8 @@
             margin: 40px auto;
             border-radius: 12px;
             box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+            position: relative;
+            z-index: 1;
         }
 
         .video-container iframe {
@@ -90,12 +98,21 @@
             border: none;
         }
 
-        /* Particules psychédéliques */
+        /* Conteneur particules fixe */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0; /* derrière le contenu */
+        }
+
         .particle {
             position: absolute;
             border-radius: 50%;
             opacity: 0.7;
-            pointer-events: none;
             animation: floatParticles linear infinite;
         }
 
@@ -105,7 +122,6 @@
             100% { transform: translateY(-10vh) translateX(var(--x)) scale(var(--scale)); opacity: 0; }
         }
 
-        /* Ajustements écrans ultra-larges */
         @media (min-width: 2500px) {
             body { background-size: 200% 200%; }
         }
@@ -113,15 +129,15 @@
 </head>
 <body>
 
+<!-- Particules psychédéliques -->
+<div id="particles"></div>
+
 <h1>Le jeu arrive bientôt !</h1>
 
-<!-- Compte à rebours -->
 <div id="countdown"></div>
 
-<!-- Bouton wishlist -->
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn">Ajouter à la wishlist</a>
 
-<!-- Vidéo YouTube responsive en bas -->
 <div class="video-container">
     <iframe 
         src="https://www.youtube.com/embed/QVZi0NMO1H4" 
@@ -150,6 +166,7 @@
     }, 1000);
 
     // Création des particules
+    const particleContainer = document.getElementById('particles');
     const particleCount = 60;
     for(let i=0; i<particleCount; i++){
         const particle = document.createElement('div');
@@ -162,7 +179,7 @@
         particle.style.setProperty('--x', (Math.random()*200 - 100) + 'vw');
         particle.style.setProperty('--scale', Math.random()*1 + 0.5);
         particle.style.animationDuration = (Math.random()*15 + 10) + 's';
-        document.body.appendChild(particle);
+        particleContainer.appendChild(particle);
     }
 </script>
 
