@@ -12,7 +12,7 @@
         body {
             display: flex;
             flex-direction: column;
-            align-items: stretch; /* permet au contenu de pousser le body */
+            align-items: stretch;
             text-align: center;
             font-family: 'Orbitron', sans-serif;
             color: #eee;
@@ -21,7 +21,7 @@
             animation: gradientAnimation 25s ease infinite;
             position: relative;
             min-height: 100%;
-            overflow-x: hidden; /* pas de scroll horizontal */
+            overflow-x: hidden;
         }
 
         @keyframes gradientAnimation {
@@ -72,7 +72,7 @@
 
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             margin: 40px auto;
@@ -89,7 +89,6 @@
             border: none;
         }
 
-        /* Conteneur particules fixe */
         #particles {
             position: fixed;
             top: 0;
@@ -97,7 +96,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0; /* derrière le contenu */
+            z-index: 0;
         }
 
         .particle {
@@ -120,7 +119,6 @@
 </head>
 <body>
 
-<!-- Particules psychédéliques -->
 <div id="particles"></div>
 
 <h1>Le jeu arrive bientôt !</h1>
@@ -128,6 +126,9 @@
 <div id="countdown"></div>
 
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn">Ajouter à la wishlist</a>
+
+<!-- ⭐ Bouton Téléchargement ajouté + caché -->
+<a id="downloadBtn" class="btn" href="SectHair.zip" style="inline-block">Télécharger le jeu</a>
 
 <div class="video-container">
     <iframe 
@@ -139,29 +140,40 @@
 </div>
 
 <script>
-    // Forcer min-height du body au chargement pour garantir le scroll
     window.addEventListener('load', () => {
         document.body.style.minHeight = document.body.scrollHeight + 'px';
     });
 
     // Compte à rebours
     const releaseDate = new Date("2025/12/12 23:42:00");
+    const revealTime = releaseDate.getTime() - 5 * 60 * 1000; // 5 minutes avant
+
     const timer = setInterval(() => {
         const now = new Date().getTime();
         const diff = releaseDate - now;
+
+        // Affiche le bouton 5 minutes avant
+        if (now >= revealTime) {
+            document.getElementById("downloadBtn").style.display = "inline-block";
+        }
+
+        // Fin du compte à rebours
         if (diff <= 0) {
             clearInterval(timer);
             document.getElementById("countdown").innerHTML = "Le jeu est sorti !";
+            document.getElementById("downloadBtn").style.display = "inline-block";
             return;
         }
+
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
         document.getElementById("countdown").innerHTML = `${days}j ${hours}h ${minutes}m ${seconds}s`;
     }, 1000);
 
-    // Création des particules
+    // Particules
     const particleContainer = document.getElementById('particles');
     const particleCount = 60;
     for(let i=0; i<particleCount; i++){
